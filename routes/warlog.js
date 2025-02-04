@@ -23,12 +23,11 @@ router.post("/warlog", async (req, res) => {
 
   try {
     const warlog = await client.clanWarlog(clanTag);
-    if (!warlog || !warlog.length) {
-      return res
-        .status(404)
-        .json({ error: "No warlog data found for this clan." });
+    if (!Array.isArray(warlog.items) || warlog.items.length === 0) {
+      return res.status(404).json({ error: "No warlog data found for this clan." });
     }
-    res.json(warlog);
+
+    res.json(warlog.items); // Ensure returning an array
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
