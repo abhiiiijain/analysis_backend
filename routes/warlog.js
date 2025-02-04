@@ -1,5 +1,6 @@
 const express = require("express");
 const { Client } = require("clashofclans.js");
+require("dotenv").config();
 
 const router = express.Router();
 const client = new Client();
@@ -17,20 +18,39 @@ const client = new Client();
 })();
 
 router.post("/warlog", async (req, res) => {
-  const { clantag } = req.body;
+  const { clanTag } = req.body;
 
-  if (!clantag) return res.status(400).json({ error: "Clan tag is required" });
+  if (!clanTag) return res.status(400).json({ error: "Clan tag is required" });
 
   try {
-    const warlog = await client.clanWarLog(clantag);
-    if (!Array.isArray(warlog.items) || warlog.items.length === 0) {
-      return res.status(404).json({ error: "No warlog data found for this clan." });
+    const warlog = await client.getClanWarLog(clanTag);
+    if (!warlog || !warlog.length) {
+      return res
+        .status(404)
+        .json({ error: "No warlog data found for this clan." });
     }
-
-    res.json(warlog.items); // Ensure returning an array
+    res.json(warlog);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
+
+// router.get("/currentwar", async (req, res) => {
+//   const { clanTag } = req.body;
+
+//   if (!clanTag) return res.status(400).json({ error: "Clan tag is required" });
+
+//   try {
+//     const currentWar = await client.getCurrentWar(clanTag);
+//     if (!currentWar) {
+//       return res
+//         .status(404)
+//         .json({ error: "No current war data found for this clan." });
+//     }
+//     res.json(currentWar);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
 
 module.exports = router;
