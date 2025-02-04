@@ -29,7 +29,7 @@ router.post("/warlog", async (req, res) => {
         .status(404)
         .json({ error: "No warlog data found for this clan." });
     }
-    res.json(warlog.slice(0, 10));
+    res.json(warlog.slice(0, 7));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
