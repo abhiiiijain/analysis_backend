@@ -22,7 +22,7 @@ router.post("/warlog", async (req, res) => {
   if (!clantag) return res.status(400).json({ error: "Clan tag is required" });
 
   try {
-    const warlog = await client.clanWarlog(clanTag);
+    const warlog = await client.clanWarlog(clantag);
     if (!Array.isArray(warlog.items) || warlog.items.length === 0) {
       return res.status(404).json({ error: "No warlog data found for this clan." });
     }
