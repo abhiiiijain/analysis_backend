@@ -29,28 +29,9 @@ router.post("/warlog", async (req, res) => {
         .status(404)
         .json({ error: "No warlog data found for this clan." });
     }
-    res.json(warlog);
+    res.json(warlog.slice(0, 10));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
-// router.get("/currentwar", async (req, res) => {
-//   const { clanTag } = req.body;
-
-//   if (!clanTag) return res.status(400).json({ error: "Clan tag is required" });
-
-//   try {
-//     const currentWar = await client.getCurrentWar(clanTag);
-//     if (!currentWar) {
-//       return res
-//         .status(404)
-//         .json({ error: "No current war data found for this clan." });
-//     }
-//     res.json(currentWar);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
 module.exports = router;
